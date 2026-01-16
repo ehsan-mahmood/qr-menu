@@ -1,6 +1,7 @@
 import api from '@/utils/api'
-import { TEST_MODE } from '@/config'
+import { TEST_MODE, DEMO_MODE } from '@/config'
 import { testOrders } from '@/utils/testData'
+import { demoOrderStorage } from '@/utils/demoStorage'
 
 export const orderService = {
   // Create new order
@@ -21,12 +22,17 @@ export const orderService = {
         ]
       }
       
-      // Add to test orders array (unshift to add at the beginning for most recent first)
-      testOrders.unshift(newOrder)
-      
-      // Keep only the most recent 50 orders in test data
-      if (testOrders.length > 50) {
-        testOrders.splice(50)
+      // In demo mode, persist to localStorage
+      if (DEMO_MODE) {
+        demoOrderStorage.add(newOrder)
+      } else {
+        // Add to test orders array (unshift to add at the beginning for most recent first)
+        testOrders.unshift(newOrder)
+        
+        // Keep only the most recent 50 orders in test data
+        if (testOrders.length > 50) {
+          testOrders.splice(50)
+        }
       }
       
       return { 
@@ -46,19 +52,45 @@ export const orderService = {
   async updateOrderStatus(orderId, status) {
     if (TEST_MODE) {
       await new Promise(resolve => setTimeout(resolve, 400))
-      // Update test data in memory
-      const order = testOrders.find(o => o.orderId === orderId)
-      if (order) {
-        order.status = status
-        order.updatedAt = new Date().toISOString()
-        if (!order.statusHistory) {
-          order.statusHistory = []
+      
+      if (DEMO_MODE) {
+        // Update in localStorage
+        const order = demoOrderStorage.getById(orderId)
+        if (order) {
+          const updatedOrder = {
+            ...order,
+            status,
+            updatedAt: new Date().toISOString(),
+            statusHistory: [
+              ...(order.statusHistory || []),
+              { status, timestamp: new Date().toISOString() }
+            ]
+          }
+          demoOrderStorage.update(orderId, updatedOrder)
+          return { 
+            data: {
+              messageId: 'ORDER_UPDATED',
+              receivingId: orderId,
+              status
+            }
+          }
         }
-        order.statusHistory.push({
-          status,
-          timestamp: order.updatedAt
-        })
+      } else {
+        // Update test data in memory
+        const order = testOrders.find(o => o.orderId === orderId)
+        if (order) {
+          order.status = status
+          order.updatedAt = new Date().toISOString()
+          if (!order.statusHistory) {
+            order.statusHistory = []
+          }
+          order.statusHistory.push({
+            status,
+            timestamp: order.updatedAt
+          })
+        }
       }
+      
       return { 
         data: {
           messageId: 'ORDER_UPDATED',
@@ -76,7 +108,13 @@ export const orderService = {
   async getOrderById(orderId) {
     if (TEST_MODE) {
       await new Promise(resolve => setTimeout(resolve, 300))
-      return { data: testOrders[0] }
+      
+      if (DEMO_MODE) {
+        const order = demoOrderStorage.getById(orderId)
+        return { data: order || null }
+      } else {
+        return { data: testOrders.find(o => o.orderId === orderId) || testOrders[0] }
+      }
     }
     
     const response = await api.get(`/orders/${orderId}`)
@@ -87,11 +125,18 @@ export const orderService = {
   async getRecentOrders(merchantId, limit = 10) {
     if (TEST_MODE) {
       await new Promise(resolve => setTimeout(resolve, 300))
-      // Return recent orders from test data, sorted by most recent
-      const sorted = [...testOrders].sort((a, b) => 
-        new Date(b.createdAt) - new Date(a.createdAt)
-      )
-      return { data: sorted.slice(0, limit) }
+      
+      if (DEMO_MODE) {
+        // Get from localStorage
+        const orders = demoOrderStorage.getRecent(limit)
+        return { data: orders }
+      } else {
+        // Return recent orders from test data, sorted by most recent
+        const sorted = [...testOrders].sort((a, b) => 
+          new Date(b.createdAt) - new Date(a.createdAt)
+        )
+        return { data: sorted.slice(0, limit) }
+      }
     }
     
     const response = await api.get(`/orders/recent/${merchantId}`, {
@@ -104,7 +149,10 @@ export const orderService = {
   async getAllOrders(filters = {}) {
     if (TEST_MODE) {
       await new Promise(resolve => setTimeout(resolve, 400))
-      let filteredOrders = [...testOrders]
+      
+      let filteredOrders = DEMO_MODE 
+        ? [...demoOrderStorage.getAll()] 
+        : [...testOrders]
       
       // Filter by status
       if (filters.status) {

@@ -1,0 +1,46 @@
+/* Theme-specific CSS variables and styles */
+
+/* DESIGN A — "Paper Menu, But Better" */
+[data-theme="designA"] {
+  --color-bg: #FAF7F2;
+  --color-text-primary: #2F2A25;
+  --color-text-secondary: #6E6259;
+  --color-primary: #7A8F5B;
+  --color-accent: #C47A5A;
+  --color-divider: #E6E1DA;
+  
+  --layout-type: list;
+  --show-images: 0;
+}
+
+/* DESIGN B — "Modern Food App" */
+[data-theme="designB"] {
+  --color-bg: #FFFFFF;
+  --color-text-primary: #1F1F1F;
+  --color-text-secondary: #6F6F6F;
+  --color-primary: #FF6B57;
+  --color-secondary: #3ECF8E;
+  --color-accent: #FFD23F;
+  
+  --layout-type: cards;
+  --sections-layout: horizontal;
+}
+
+/* DESIGN C — "Calm Premium" */
+[data-theme="designC"] {
+  --color-bg: #F9FAF9;
+  --color-text-primary: #222222;
+  --color-text-secondary: #8A8F8C;
+  --color-primary: #1F3D2B;
+  --color-accent: #C8B87A;
+  --color-divider: #ECECEC;
+  
+  --layout-type: minimal;
+}
+
+/* Apply theme background */
+[data-theme] body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+

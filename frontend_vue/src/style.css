@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream text-charcoal;
+    font-family: 'Inter', 'Poppins', 'Nunito', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-500 active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply bg-warm-gray text-charcoal active:scale-95 transition-all duration-200;
+  }
+  
+  .btn-secondary:hover {
+    opacity: 0.8;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-sm p-4 border border-warm-gray;
+  }
+  
+  .card-gradient {
+    @apply rounded-lg p-4;
+    background: linear-gradient(135deg, rgba(255, 131, 96, 0.1) 0%, rgba(255, 248, 243, 0.95) 100%);
+    border: 1px solid rgba(255, 131, 96, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 border border-warm-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300;
+  }
+  
+  /* Menu Section Golden Accent Line */
+  .section-accent-line {
+    position: relative;
+  }
+  
+  .section-accent-line::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 209, 102, 0.8) 0%, rgba(255, 209, 102, 0.4) 100%);
+  }
+}
+
+@layer utilities {
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+}
+

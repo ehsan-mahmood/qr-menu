@@ -4,20 +4,32 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'frontend/**'
   workflow_dispatch:  # Allow manual trigger
+
+# Set permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
@@ -30,18 +42,14 @@ jobs:
       - name: Build project
         working-directory: ./frontend
         run: npm run build
-        env:
-          # Optional: Set VITE_BASE_PATH if deploying to subdirectory
-          # VITE_BASE_PATH: /your-repo-name/
 
       - name: Create .nojekyll file
         working-directory: ./frontend/dist
-        run: touch .nojekyll
+        run: touch .nojekyll || echo '' > .nojekyll
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./frontend/dist
-          cname: # Optional: Add your custom domain here, e.g., example.com

@@ -38,6 +38,8 @@ jobs:
 
       - name: Build project
         working-directory: ./frontend
+        env:
+          VITE_BASE_PATH: /qr-menu/
         run: npm run build
 
       - name: Verify build output

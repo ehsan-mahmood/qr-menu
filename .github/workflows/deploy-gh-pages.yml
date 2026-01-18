@@ -20,9 +20,6 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
       - name: Checkout repository
@@ -43,12 +40,20 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
+      - name: Verify build output
+        working-directory: ./frontend
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "❌ Error: dist/ directory not found after build"
+            exit 1
+          fi
+          echo "✅ Build output verified"
+
       - name: Create .nojekyll file
         working-directory: ./frontend/dist
-        run: touch .nojekyll || echo '' > .nojekyll
+        run: echo '' > .nojekyll
 
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

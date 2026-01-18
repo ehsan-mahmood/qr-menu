@@ -104,7 +104,7 @@
             <!-- Item Info -->
             <div class="p-4">
               <h3 class="font-bold text-base mb-1.5" style="color: #2F2A25; font-weight: 700; font-family: 'Anton', sans-serif;">{{ item.name }}</h3>
-              <p v-if="item.description" class="text-sm mt-1.5 line-clamp-2 leading-relaxed font-normal" style="color: #6E6159;">
+              <p v-if="item.description" class="text-sm mt-1.5 line-clamp-2 leading-relaxed font-normal" style="color: #1F1F1F; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 {{ item.description }}
               </p>
               <div class="flex items-center justify-between mt-3 pt-3" style="border-top: 1px solid #E8E4DD;">

@@ -3,6 +3,7 @@
 // Can also be explicitly set via VITE_TEST_MODE environment variable
 const isGitHubPages = typeof window !== 'undefined' && (
   window.location.hostname === 'github.io' ||
+  window.location.hostname.endsWith('.github.io') ||
   window.location.hostname.includes('github-pages') ||
   window.location.hostname.includes('gh-pages')
 )

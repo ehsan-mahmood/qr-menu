@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
+  <script>
+    // GitHub Pages 404 handler for Vue Router SPA
+    // When GitHub Pages can't find a file, it serves 404.html
+    // We redirect to index.html and Vue Router will handle the routing
+    const basePath = '/qr-menu';
+    let path = window.location.pathname;
+    
+    // Remove base path if present to get the relative path
+    if (path.startsWith(basePath)) {
+      path = path.substring(basePath.length);
+    }
+    
+    // Ensure path starts with /
+    if (!path.startsWith('/')) {
+      path = '/' + path;
+    }
+    
+    // Preserve query string and hash
+    const search = window.location.search;
+    const hash = window.location.hash;
+    
+    // Redirect to index.html - Vue Router will use the current pathname
+    window.location.replace(basePath + '/index.html' + path + search + hash);
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>

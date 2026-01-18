@@ -27,8 +27,8 @@
               ? 'text-white' 
               : 'hover:opacity-80'"
             :style="activeSection === section.id 
-              ? 'background-color: #2F2A25; font-family: \"Anton\", sans-serif;' 
-              : 'background-color: #F5F5F5; color: #2F2A25; font-family: \"Anton\", sans-serif;'"
+              ? { backgroundColor: '#2F2A25', fontFamily: 'Anton, sans-serif' } 
+              : { backgroundColor: '#F5F5F5', color: '#2F2A25', fontFamily: 'Anton, sans-serif' }"
           >
             {{ section.name }}
           </button>

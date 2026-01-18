@@ -1,7 +1,7 @@
 import api from '@/utils/api'
 import { TEST_MODE, DEMO_MODE } from '@/config'
 import { testAnalytics } from '@/utils/testData'
-import { demoAnalyticsStorage } from '@/utils/demoStorage'
+import { demoAnalyticsStorage, demoOrderStorage } from '@/utils/demoStorage'
 
 export const analyticsService = {
   // Post analytics event

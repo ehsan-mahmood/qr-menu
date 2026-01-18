@@ -55,6 +55,10 @@ jobs:
         working-directory: ./frontend/dist
         run: echo '' > .nojekyll
 
+      - name: Copy index.html to 404.html for SPA routing
+        working-directory: ./frontend/dist
+        run: cp index.html 404.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

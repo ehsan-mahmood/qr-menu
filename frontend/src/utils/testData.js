@@ -23,7 +23,7 @@ export const testMenu = {
           name: 'Eggs Benedict',
           description: 'Poached eggs with hollandaise on English muffin',
           price: 14.00,
-          image: '/eggs-benny.jpg',
+          image: `${import.meta.env.BASE_URL}eggs-benny.jpg`.replace(/\/+/g, '/'),
           available: true,
           category: 'breakfast',
         },

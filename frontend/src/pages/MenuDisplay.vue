@@ -368,7 +368,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMenuStore } from '@/stores/menuStore'
 import { useBasketStore } from '@/stores/basketStore'
@@ -434,9 +434,69 @@ onMounted(async () => {
 
     if (sections.value.length > 0) {
       activeSection.value = sections.value[0].id
+      // Set up scroll detection for section navigation
+      await nextTick()
+      setupScrollDetection()
     }
   } catch (err) {
     console.error('Failed to load menu:', err)
+  }
+})
+
+let intersectionObserver = null
+let isScrollingProgrammatically = false
+
+const setupScrollDetection = () => {
+  // Clean up existing observer if any
+  if (intersectionObserver) {
+    intersectionObserver.disconnect()
+  }
+
+  // Create IntersectionObserver to detect which section is in view
+  intersectionObserver = new IntersectionObserver(
+    (entries) => {
+      // Skip updating if we're programmatically scrolling (user clicked a category button)
+      if (isScrollingProgrammatically) {
+        return
+      }
+
+      // Find the section that's most visible
+      let mostVisible = null
+      let maxRatio = 0
+
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
+          maxRatio = entry.intersectionRatio
+          mostVisible = entry.target
+        }
+      })
+
+      // Update activeSection if we found a visible section
+      if (mostVisible) {
+        const sectionId = mostVisible.id.replace('section-', '')
+        if (sectionId && sectionId !== activeSection.value) {
+          activeSection.value = sectionId
+        }
+      }
+    },
+    {
+      rootMargin: '-130px 0px -50% 0px', // Account for sticky header (130px) + some offset
+      threshold: [0, 0.25, 0.5, 0.75, 1]
+    }
+  )
+
+  // Observe all section elements
+  sections.value.forEach((section) => {
+    const element = document.getElementById(`section-${section.id}`)
+    if (element) {
+      intersectionObserver.observe(element)
+    }
+  })
+}
+
+onUnmounted(() => {
+  if (intersectionObserver) {
+    intersectionObserver.disconnect()
   }
 })
 
@@ -444,7 +504,14 @@ const scrollToSection = (sectionId) => {
   activeSection.value = sectionId
   const element = document.getElementById(`section-${sectionId}`)
   if (element) {
+    // Temporarily disable scroll detection to prevent flickering
+    isScrollingProgrammatically = true
     element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    
+    // Re-enable scroll detection after scroll animation completes
+    setTimeout(() => {
+      isScrollingProgrammatically = false
+    }, 1000) // Wait for smooth scroll to complete
   }
 }
 

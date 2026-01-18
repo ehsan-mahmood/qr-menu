@@ -6,7 +6,7 @@
     <div class="sticky top-0 z-10" style="background-color: #FEFDF9; border-bottom: 1px solid #E8E4DD;">
       <div class="container mx-auto px-4 py-5">
         <div class="text-center">
-          <h1 class="text-2xl font-bold" style="color: #2F2A25; letter-spacing: -0.3px; font-weight: 700;">
+          <h1 class="text-2xl font-bold" style="color: #2F2A25; letter-spacing: -0.3px; font-weight: 700; font-family: 'Anton', sans-serif;">
             {{ merchantName }}
           </h1>
           <p v-if="tableNumber" class="text-sm mt-1.5 font-normal" style="color: #6E6159;">Table {{ tableNumber }}</p>
@@ -27,8 +27,8 @@
               ? 'text-white' 
               : 'hover:opacity-80'"
             :style="activeSection === section.id 
-              ? 'background-color: #2F2A25;' 
-              : 'background-color: #F5F5F5; color: #2F2A25;'"
+              ? 'background-color: #2F2A25; font-family: \"Anton\", sans-serif;' 
+              : 'background-color: #F5F5F5; color: #2F2A25; font-family: \"Anton\", sans-serif;'"
           >
             {{ section.name }}
           </button>
@@ -64,7 +64,7 @@
       <!-- Menu Sections -->
       <div v-for="section in sections" :key="section.id" :id="`section-${section.id}`" class="mb-10" style="scroll-margin-top: 130px;">
         <!-- Large Section Header -->
-        <h2 class="text-3xl font-bold mb-6 pt-2 uppercase tracking-tight" style="color: #8B4513; font-weight: 700; letter-spacing: 0.5px;">
+        <h2 class="text-3xl font-bold mb-6 pt-2 uppercase tracking-tight" style="color: #8B4513; font-weight: 700; letter-spacing: 0.5px; font-family: 'Anton', sans-serif;">
           {{ section.name }}
         </h2>
 
@@ -103,7 +103,7 @@
 
             <!-- Item Info -->
             <div class="p-4">
-              <h3 class="font-bold text-base mb-1.5" style="color: #2F2A25; font-weight: 700;">{{ item.name }}</h3>
+              <h3 class="font-bold text-base mb-1.5" style="color: #2F2A25; font-weight: 700; font-family: 'Anton', sans-serif;">{{ item.name }}</h3>
               <p v-if="item.description" class="text-sm mt-1.5 line-clamp-2 leading-relaxed font-normal" style="color: #6E6159;">
                 {{ item.description }}
               </p>
@@ -134,7 +134,7 @@
           <button
             @click="goToBasket"
             class="px-6 py-3 rounded-lg font-semibold text-white transition-all hover:opacity-90 active:scale-95"
-            style="background-color: #2F2A25; font-weight: 600;"
+            style="background-color: #2F2A25; font-weight: 600; font-family: 'Anton', sans-serif;"
           >
             View Order →
           </button>

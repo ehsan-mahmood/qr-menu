@@ -27,7 +27,7 @@
               ? 'text-white' 
               : 'hover:opacity-80'"
             :style="activeSection === section.id 
-              ? { backgroundColor: '#2F2A25', fontFamily: 'Anton, sans-serif' } 
+              ? { backgroundColor: '#2F2A25', fontFamily: 'Anton, courier' } 
               : { backgroundColor: '#F5F5F5', color: '#2F2A25', fontFamily: 'Anton, sans-serif' }"
           >
             {{ section.name }}
@@ -104,11 +104,11 @@
             <!-- Item Info -->
             <div class="p-4">
               <h3 class="font-bold text-base mb-1.5" style="color: #2F2A25; font-weight: 700; font-family: 'Anton', sans-serif;">{{ item.name }}</h3>
-              <p v-if="item.description" class="text-sm mt-1.5 line-clamp-2 leading-relaxed font-normal" style="color: #1F1F1F; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+              <p v-if="item.description" class="text-sm mt-1.5 line-clamp-2 leading-relaxed font-normal" style="color: #1F1F1F; font-family: 'Courier New', Courier, monospace;">
                 {{ item.description }}
               </p>
               <div class="flex items-center justify-between mt-3 pt-3" style="border-top: 1px solid #E8E4DD;">
-                <span class="font-semibold text-lg" style="color: #2F2A25; font-weight: 600;">${{ item.price.toFixed(2) }}</span>
+                <span class="font-semibold text-lg" style="color: #2F2A25; font-weight: 600; font-family: 'Courier New', Courier, monospace;">${{ item.price.toFixed(2) }}</span>
                 <span v-if="!item.available" class="text-xs px-2 py-1 rounded-full font-medium" style="background-color: #F5F5F5; color: #6E6159;">
                   Unavailable
                 </span>

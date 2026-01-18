@@ -364,6 +364,7 @@ import { useAuthStore } from '@/stores/authStore'
 import menuService from '@/services/menuService'
 import { TEST_MODE } from '@/config'
 import { generateSlug } from '@/utils/slug'
+import { testMenu } from '@/utils/testData'
 import TopItems from '@/components/TopItems.vue'
 import AnalyticsTable from '@/components/AnalyticsTable.vue'
 import PeakHoursChart from '@/components/PeakHoursChart.vue'
@@ -524,9 +525,12 @@ const handleLogout = async () => {
 }
 
 const customerMenuUrl = computed(() => {
-  const merchantNameSlug = generateSlug(merchantName.value || 'restaurant')
-  const menuNameSlug = 'main-menu' // Default menu name, can be updated later
-  return `${window.location.origin}/menu/${merchantNameSlug}/${menuNameSlug}`
+  // Use menuId format for demo mode (test-menu-001)
+  // BASE_URL already includes /qr-menu/ when deployed to GitHub Pages
+  const baseUrl = import.meta.env.BASE_URL || '/'
+  const basePath = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl
+  const menuId = TEST_MODE ? testMenu.menuId : 'menu-001' // Use test menu ID in demo mode
+  return `${window.location.origin}${basePath}/menu/${menuId}`
 })
 
 const copyMenuUrl = async () => {

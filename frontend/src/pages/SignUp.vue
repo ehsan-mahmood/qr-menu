@@ -1,81 +1,77 @@
 <template>
-  <div class="min-h-screen bg-cream flex items-center justify-center px-4 py-8">
-    <div class="max-w-md w-full">
+  <div class="signup-page">
+    <div class="signup-container">
       <!-- Logo/Brand -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-charcoal mb-2">QR Menu</h1>
-        <p class="text-gray">Create Your Merchant Account</p>
+      <div class="signup-header">
+        <h1 class="signup-title">QR Menu</h1>
+        <p class="signup-subtitle">Create Your Merchant Account</p>
       </div>
 
       <!-- Sign Up Card -->
-      <div class="card">
-        <h2 class="text-2xl font-bold text-charcoal mb-6">Get Started</h2>
+      <div class="signup-card">
+        <h2 class="card-title">Get Started</h2>
 
         <!-- Test Mode Banner -->
-        <div v-if="testMode" class="mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-          <p class="text-yellow-800 text-sm text-center">
-            🧪 Test Mode: Sign up will proceed to onboarding
+        <div v-if="testMode" class="test-banner">
+          <p>
+            Test Mode: Sign up will proceed to onboarding
           </p>
         </div>
 
         <!-- Error Message -->
-        <div v-if="errorMessage" class="mb-4 bg-red-50 border border-red-200 rounded-lg p-3">
-          <p class="text-red-700 text-sm">{{ errorMessage }}</p>
+        <div v-if="errorMessage" class="error-banner">
+          <p>{{ errorMessage }}</p>
         </div>
 
         <!-- Sign Up Form -->
-        <form @submit.prevent="handleSignUp" class="space-y-4">
-          <!-- Debug Info -->
-          <div v-if="testMode" class="text-xs text-gray-500 p-2 bg-gray-100 rounded">
-            Form Valid: {{ isFormValid }} | Loading: {{ loading }}
-          </div>
+        <form @submit.prevent="handleSignUp" class="signup-form">
           <div>
-            <label for="name" class="block text-sm font-medium text-charcoal mb-1">
-              Full Name <span class="text-red-500">*</span>
+            <label for="name" class="input-label">
+              Full Name <span class="required">*</span>
             </label>
             <input
               id="name"
               v-model="formData.name"
               type="text"
               required
-              class="input"
+              class="input-field"
               placeholder="John Doe"
               :disabled="loading"
             />
           </div>
 
           <div>
-            <label for="email" class="block text-sm font-medium text-charcoal mb-1">
-              Email <span class="text-red-500">*</span>
+            <label for="email" class="input-label">
+              Email <span class="required">*</span>
             </label>
             <input
               id="email"
               v-model="formData.email"
               type="email"
               required
-              class="input"
+              class="input-field"
               placeholder="your@email.com"
               :disabled="loading"
             />
           </div>
 
           <div>
-            <label for="phone" class="block text-sm font-medium text-charcoal mb-1">
+            <label for="phone" class="input-label">
               Phone Number (Optional)
             </label>
             <input
               id="phone"
               v-model="formData.phone"
               type="tel"
-              class="input"
+              class="input-field"
               placeholder="+1 (555) 123-4567"
               :disabled="loading"
             />
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium text-charcoal mb-1">
-              Password <span class="text-red-500">*</span>
+            <label for="password" class="input-label">
+              Password <span class="required">*</span>
             </label>
             <input
               id="password"
@@ -83,50 +79,47 @@
               type="password"
               required
               minlength="8"
-              class="input"
+              class="input-field"
               placeholder="••••••••"
               :disabled="loading"
             />
-            <p class="text-xs text-gray mt-1">At least 8 characters</p>
+            <p class="input-hint">At least 8 characters</p>
           </div>
 
           <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-charcoal mb-1">
-              Confirm Password <span class="text-red-500">*</span>
+            <label for="confirmPassword" class="input-label">
+              Confirm Password <span class="required">*</span>
             </label>
             <input
               id="confirmPassword"
               v-model="formData.confirmPassword"
               type="password"
               required
-              class="input"
+              class="input-field"
               placeholder="••••••••"
               :disabled="loading"
             />
           </div>
 
-          <div class="flex items-start">
+          <div class="terms-group">
             <input
               id="terms"
               v-model="formData.agreeToTerms"
               type="checkbox"
               required
-              class="mt-1 rounded border-warm-gray text-primary focus:ring-primary"
+              class="checkbox-input"
               :disabled="loading"
-              @change="() => console.log('Terms checkbox changed:', formData.agreeToTerms)"
             />
-            <label for="terms" class="ml-2 text-sm text-gray">
-              I agree to the <button type="button" class="text-primary hover:underline">Terms of Service</button> 
-              and <button type="button" class="text-primary hover:underline">Privacy Policy</button>
+            <label for="terms" class="terms-label">
+              I agree to the <button type="button" class="link-button">Terms of Service</button> 
+              and <button type="button" class="link-button">Privacy Policy</button>
             </label>
           </div>
 
           <button
             type="submit"
-            class="w-full btn btn-primary"
-            :class="{ 'opacity-50 cursor-not-allowed': !isFormValid || loading }"
+            class="btn-primary btn-full"
             :disabled="!isFormValid || loading"
-            @click="(e) => { console.log('Button clicked!', { isFormValid: isFormValid, loading: loading, disabled: !isFormValid || loading }); }"
           >
             <span v-if="loading">Creating Account...</span>
             <span v-else>Create Account</span>
@@ -134,19 +127,17 @@
         </form>
 
         <!-- Divider -->
-        <div class="relative my-6">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-warm-gray"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray">Already have an account?</span>
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">
+            <span>Already have an account?</span>
           </div>
         </div>
 
         <!-- Login Link -->
         <button
           @click="goToLogin"
-          class="w-full btn btn-secondary"
+          class="btn-secondary btn-full"
         >
           Log In
         </button>
@@ -231,9 +222,262 @@ const goToLogin = () => {
 </script>
 
 <style scoped>
-input[type="checkbox"] {
-  width: 1rem;
-  height: 1rem;
+/* Light Theme - Updated Design Handoff */
+.signup-page {
+  min-height: 100vh;
+  background-color: #F8F8F7;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.signup-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.signup-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 8px 0;
+}
+
+.signup-subtitle {
+  font-size: 15px;
+  color: #737373;
+  margin: 0;
+}
+
+.signup-card {
+  background-color: #FEFEFE;
+  border: 2px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 24px 0;
+}
+
+.test-banner {
+  background-color: #FFF8E1;
+  border: 1px solid #FFE082;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.test-banner p {
+  font-size: 13px;
+  font-weight: 400;
+  color: #F57C00;
+  margin: 0;
+}
+
+.error-banner {
+  background-color: #FFEBEE;
+  border: 1px solid #EF9A9A;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.error-banner p {
+  font-size: 13px;
+  color: #C62828;
+  margin: 0;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b0706;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #DC2626;
+}
+
+.input-field {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+  min-height: 48px;
+  transition: all 120ms ease-out;
+  box-sizing: border-box;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0b0706;
+}
+
+.input-field::placeholder {
+  color: #737373;
+}
+
+.input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-hint {
+  font-size: 13px;
+  color: #737373;
+  margin: 8px 0 0 0;
+}
+
+.terms-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.checkbox-input {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.terms-label {
+  font-size: 14px;
+  font-weight: 400;
+  color: #737373;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #4A1A28;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  transition: all 120ms ease-out;
+}
+
+.link-button:hover {
+  opacity: 0.7;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4A1A28 0%, #5D1F33 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(74, 26, 40, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5D1F33 0%, #4A1A28 100%);
+  box-shadow: 0 4px 12px rgba(74, 26, 40, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #0b0706;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  border-color: #4A1A28;
+  background-color: #FAFAF9;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.divider {
+  position: relative;
+  margin: 24px 0;
+}
+
+.divider-line {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+.divider-line::before {
+  content: '';
+  width: 100%;
+  border-top: 1px solid #E5E5E4;
+}
+
+.divider-text {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.divider-text span {
+  background-color: #FEFEFE;
+  padding: 0 16px;
+  color: #737373;
 }
 </style>
 

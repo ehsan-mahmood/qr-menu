@@ -1,112 +1,102 @@
 <template>
-    <div class="min-h-screen bg-cream">
-    <div class="container mx-auto px-4 py-12">
+  <div class="landing-page">
+    <div class="landing-content">
       <!-- Header -->
-      <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold text-charcoal mb-4">
+      <div class="landing-header">
+        <h1 class="landing-title">
           QR Menu
         </h1>
-        <p class="text-lg text-gray">
+        <p class="landing-subtitle">
           Digital Menu System for Cafés & Restaurants
         </p>
       </div>
       
       <!-- Test Mode Banner -->
-      <div v-if="testMode" class="max-w-2xl mx-auto mb-8">
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-          <p class="text-yellow-800 font-medium">
-            🧪 Test Mode Active - Using Static Data
-          </p>
-        </div>
+      <div v-if="testMode" class="test-banner">
+        <p class="test-banner-text">
+          🧪 Test Mode Active - Using Static Data
+        </p>
       </div>
       
       <!-- Quick Actions -->
-      <div class="max-w-2xl mx-auto space-y-4">
+      <div class="quick-actions">
         <!-- View Demo Menu -->
         <button
           @click="viewDemoMenu"
-          class="w-full card-gradient hover:shadow-warm transition-all duration-200 text-left"
+          class="action-card"
         >
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-3xl">
-              📋
+          <div class="action-card-content">
+            <div class="action-icon">📋</div>
+            <div class="action-text">
+              <h3 class="action-title">View Demo Menu</h3>
+              <p class="action-description">Browse our sample café menu</p>
             </div>
-            <div class="flex-1">
-              <h3 class="text-xl font-bold text-charcoal">View Demo Menu</h3>
-              <p class="text-gray">Browse our sample café menu</p>
-            </div>
-            <span class="text-2xl text-gray">→</span>
+            <span class="action-arrow">→</span>
           </div>
         </button>
         
         <!-- Scan QR Code -->
         <button
           @click="goToQRScanner"
-          class="w-full card-gradient hover:shadow-warm transition-all duration-200 text-left"
+          class="action-card"
         >
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center text-3xl">
-              📷
+          <div class="action-card-content">
+            <div class="action-icon">📷</div>
+            <div class="action-text">
+              <h3 class="action-title">Scan QR Code</h3>
+              <p class="action-description">Scan table QR code to view menu</p>
             </div>
-            <div class="flex-1">
-              <h3 class="text-xl font-bold text-charcoal">Scan QR Code</h3>
-              <p class="text-gray">Scan table QR code to view menu</p>
-            </div>
-            <span class="text-2xl text-gray">→</span>
+            <span class="action-arrow">→</span>
           </div>
         </button>
         
         <!-- Import Menu (OCR) -->
         <button
           @click="goToOCR"
-          class="w-full card-gradient hover:border-primary/30 transition-all duration-200 text-left"
+          class="action-card"
         >
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center text-3xl">
-              📸
+          <div class="action-card-content">
+            <div class="action-icon">📸</div>
+            <div class="action-text">
+              <h3 class="action-title">Import Menu</h3>
+              <p class="action-description">Upload paper menu for OCR parsing</p>
             </div>
-            <div class="flex-1">
-              <h3 class="text-xl font-bold text-charcoal">Import Menu</h3>
-              <p class="text-gray">Upload paper menu for OCR parsing</p>
-            </div>
-            <span class="text-2xl text-gray">→</span>
+            <span class="action-arrow">→</span>
           </div>
         </button>
         
         <!-- Dashboard -->
         <button
           @click="goToDashboard"
-          class="w-full card-gradient hover:border-primary/30 transition-all duration-200 text-left"
+          class="action-card"
         >
-          <div class="flex items-center gap-4">
-            <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-3xl">
-              📊
+          <div class="action-card-content">
+            <div class="action-icon">📊</div>
+            <div class="action-text">
+              <h3 class="action-title">Analytics Dashboard</h3>
+              <p class="action-description">View merchant analytics and insights</p>
             </div>
-            <div class="flex-1">
-              <h3 class="text-xl font-bold text-charcoal">Analytics Dashboard</h3>
-              <p class="text-gray">View merchant analytics and insights</p>
-            </div>
-            <span class="text-2xl text-gray">→</span>
+            <span class="action-arrow">→</span>
           </div>
         </button>
       </div>
       
       <!-- Features -->
-      <div class="max-w-4xl mx-auto mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="text-center">
-          <div class="text-4xl mb-2">⚡</div>
-          <h4 class="font-bold mb-1 text-charcoal">Fast & Simple</h4>
-          <p class="text-sm text-gray">Quick menu browsing and ordering</p>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <h4 class="feature-title">Fast & Simple</h4>
+          <p class="feature-description">Quick menu browsing and ordering</p>
         </div>
-        <div class="text-center">
-          <div class="text-4xl mb-2">📱</div>
-          <h4 class="font-bold mb-1 text-charcoal">Mobile First</h4>
-          <p class="text-sm text-gray">Optimized for smartphone use</p>
+        <div class="feature-item">
+          <div class="feature-icon">📱</div>
+          <h4 class="feature-title">Mobile First</h4>
+          <p class="feature-description">Optimized for smartphone use</p>
         </div>
-        <div class="text-center">
-          <div class="text-4xl mb-2">🎯</div>
-          <h4 class="font-bold mb-1 text-charcoal">Easy Setup</h4>
-          <p class="text-sm text-gray">Upload menu and start in minutes</p>
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <h4 class="feature-title">Easy Setup</h4>
+          <p class="feature-description">Upload menu and start in minutes</p>
         </div>
       </div>
     </div>
@@ -172,3 +162,165 @@ const goToDashboard = () => {
 }
 </script>
 
+<style scoped>
+/* Light Theme - Updated Design Handoff */
+.landing-page {
+  min-height: 100vh;
+  background-color: #F8F8F7;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+}
+
+.landing-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.landing-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.landing-title {
+  font-size: 48px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 16px 0;
+}
+
+.landing-subtitle {
+  font-size: 18px;
+  color: #737373;
+  margin: 0;
+}
+
+.test-banner {
+  max-width: 700px;
+  margin: 0 auto 32px;
+  background-color: #FFF8E1;
+  border: 1px solid #FFE082;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.test-banner-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #F57C00;
+  margin: 0;
+}
+
+.quick-actions {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 64px;
+}
+
+.action-card {
+  width: 100%;
+  background-color: #FEFEFE;
+  border: 2px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.action-card:hover {
+  border-color: #4A1A28;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.action-card-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.action-icon {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(74, 26, 40, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.action-text {
+  flex: 1;
+}
+
+.action-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 4px 0;
+}
+
+.action-description {
+  font-size: 15px;
+  color: #737373;
+  margin: 0;
+}
+
+.action-arrow {
+  font-size: 24px;
+  color: #737373;
+  flex-shrink: 0;
+}
+
+.features-grid {
+  max-width: 900px;
+  margin: 64px auto 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.feature-item {
+  text-align: center;
+}
+
+.feature-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.feature-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 4px 0;
+}
+
+.feature-description {
+  font-size: 14px;
+  color: #737373;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .landing-title {
+    font-size: 36px;
+  }
+  
+  .landing-subtitle {
+    font-size: 16px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

@@ -1,58 +1,58 @@
 <template>
-  <div class="min-h-screen bg-cream">
+  <div class="onboarding-page">
     <!-- Progress Bar -->
-    <div class="bg-white border-b border-warm-gray sticky top-0 z-20">
-      <div class="container mx-auto px-4 py-4">
-        <div class="flex items-center justify-between mb-3">
-          <h1 class="text-lg font-bold text-charcoal">Setup Your Menu</h1>
+    <div class="progress-bar">
+      <div class="progress-content">
+        <div class="progress-header">
+          <h1 class="progress-title">Setup Your Menu</h1>
           <button
             v-if="currentStep > 1"
             @click="goBack"
-            class="text-sm text-gray hover:text-charcoal"
+            class="back-button"
           >
             ← Back
           </button>
         </div>
-        <div class="flex gap-2">
+        <div class="progress-steps">
           <div
             v-for="step in totalSteps"
             :key="step"
-            class="flex-1 h-2 rounded-full transition-all"
-            :class="step <= currentStep ? 'bg-primary' : 'bg-warm-gray'"
+            class="progress-step"
+            :class="{ 'progress-step-active': step <= currentStep }"
           ></div>
         </div>
-        <p class="text-xs text-gray mt-2">Step {{ currentStep }} of {{ totalSteps }}</p>
+        <p class="progress-text">Step {{ currentStep }} of {{ totalSteps }}</p>
       </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="onboarding-content">
       <!-- Step 1: Restaurant/Company Name -->
-      <div v-if="currentStep === 1" class="card">
-        <div class="text-center mb-6">
-          <div class="text-5xl mb-4">🏪</div>
-          <h2 class="text-2xl font-bold text-charcoal mb-2">Welcome!</h2>
-          <p class="text-gray">Let's start with your business details</p>
+      <div v-if="currentStep === 1" class="step-card">
+        <div class="step-header">
+          <div class="step-icon">🏪</div>
+          <h2 class="step-title">Welcome!</h2>
+          <p class="step-description">Let's start with your business details</p>
         </div>
 
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-charcoal mb-1">
-              Restaurant/Company Name <span class="text-red-500">*</span>
+        <div class="step-form">
+          <div class="form-field">
+            <label class="input-label">
+              Restaurant/Company Name <span class="required">*</span>
             </label>
             <input
               v-model="onboardingData.restaurantName"
               type="text"
               required
-              class="input"
+              class="input-field"
               placeholder="e.g., The Coffee House"
             />
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-charcoal mb-1">
+          <div class="form-field">
+            <label class="input-label">
               Business Type
             </label>
-            <select v-model="onboardingData.businessType" class="input">
+            <select v-model="onboardingData.businessType" class="input-field select-field">
               <option value="cafe">Café</option>
               <option value="restaurant">Restaurant</option>
               <option value="bar">Bar</option>
@@ -62,21 +62,21 @@
             </select>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-charcoal mb-1">
+          <div class="form-field">
+            <label class="input-label">
               Address (Optional)
             </label>
             <textarea
               v-model="onboardingData.address"
               rows="2"
-              class="input resize-none"
+              class="input-field textarea-field"
               placeholder="123 Main St, City, State"
             ></textarea>
           </div>
 
           <button
             @click="nextStep"
-            class="w-full btn btn-primary"
+            class="btn-primary btn-full"
             :disabled="!onboardingData.restaurantName"
           >
             Continue
@@ -936,3 +936,272 @@ const skipImages = () => {
 }
 </script>
 
+<style scoped>
+/* Light Theme - Updated Design Handoff */
+.onboarding-page {
+  min-height: 100vh;
+  background-color: #F8F8F7;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+}
+
+/* Progress Bar */
+.progress-bar {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E5E5E4;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.progress-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 24px;
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.progress-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #0b0706;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+}
+
+.back-button:hover {
+  opacity: 0.7;
+}
+
+.progress-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.progress-step {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background-color: #E5E5E4;
+  transition: all 120ms ease-out;
+}
+
+.progress-step-active {
+  background-color: #4A1A28;
+}
+
+.progress-text {
+  font-size: 13px;
+  color: #737373;
+  margin: 0;
+}
+
+/* Content */
+.onboarding-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* Step Card */
+.step-card {
+  background-color: #FEFEFE;
+  border: 2px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.step-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.step-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.step-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 8px 0;
+}
+
+.step-description {
+  font-size: 15px;
+  color: #737373;
+  margin: 0;
+}
+
+.step-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b0706;
+}
+
+.required {
+  color: #DC2626;
+}
+
+.input-field {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+  min-height: 48px;
+  transition: all 120ms ease-out;
+  box-sizing: border-box;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0b0706;
+}
+
+.input-field::placeholder {
+  color: #737373;
+}
+
+.select-field {
+  cursor: pointer;
+}
+
+.textarea-field {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #4A1A28 0%, #5D1F33 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(74, 26, 40, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5D1F33 0%, #4A1A28 100%);
+  box-shadow: 0 4px 12px rgba(74, 26, 40, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #0b0706;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  border-color: #4A1A28;
+  background-color: #FAFAF9;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* Override Tailwind classes with design system */
+:deep(.card) {
+  background-color: #FEFEFE;
+  border: 2px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+:deep(.input) {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+  min-height: 48px;
+  transition: all 120ms ease-out;
+  box-sizing: border-box;
+}
+
+:deep(.btn) {
+  min-height: 48px;
+  font-family: 'Inter', system-ui, sans-serif;
+  transition: all 120ms ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .onboarding-content {
+    padding: 24px 16px;
+  }
+  
+  .step-card {
+    padding: 24px;
+  }
+}
+</style>

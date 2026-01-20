@@ -1,16 +1,16 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="menu-edit-page">
     <!-- Header -->
-    <div class="bg-white shadow-sm">
-      <div class="container mx-auto px-4 py-4">
-        <div class="flex items-center justify-between mb-4">
+    <div class="header-bar">
+      <div class="header-content">
+        <div class="header-top">
           <div>
-            <h1 class="text-xl font-bold text-gray-900">Edit Menu</h1>
-            <p v-if="menuName" class="text-sm text-gray-500 mt-1">{{ menuName }}</p>
+            <h1 class="page-title">Edit Menu</h1>
+            <p v-if="menuName" class="menu-subtitle">{{ menuName }}</p>
           </div>
           <button
             @click="router.push('/dashboard')"
-            class="text-sm text-gray-600 hover:text-gray-900 underline"
+            class="btn-link"
           >
             ← Back to Dashboard
           </button>
@@ -18,71 +18,71 @@
       </div>
     </div>
 
-    <div class="container mx-auto px-4 py-6 max-w-4xl">
+    <div class="content">
       <!-- Loading State -->
-      <div v-if="loading" class="text-center py-12">
-        <div class="text-4xl mb-4">⏳</div>
-        <p class="text-gray-600">Loading menu...</p>
+      <div v-if="loading" class="empty-state">
+        <div class="empty-icon">⏳</div>
+        <p class="empty-text">Loading menu...</p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="card bg-red-50 border border-red-200 text-center">
-        <div class="text-4xl mb-4">⚠️</div>
-        <h3 class="text-lg font-bold text-red-900 mb-2">Failed to Load Menu</h3>
-        <p class="text-red-700 mb-4">{{ error }}</p>
-        <button @click="loadMenu" class="btn btn-primary">
+      <div v-else-if="error" class="error-card">
+        <div class="error-icon">⚠️</div>
+        <h3 class="error-title">Failed to Load Menu</h3>
+        <p class="error-message">{{ error }}</p>
+        <button @click="loadMenu" class="btn-primary">
           Try Again
         </button>
       </div>
 
       <!-- Menu Edit Form -->
-      <div v-else class="space-y-6">
+      <div v-else class="form-container">
         <!-- Menu Name -->
-        <div class="card">
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Menu Name <span class="text-red-500">*</span>
+        <div class="section-card">
+          <label class="input-label">
+            Menu Name <span class="required">*</span>
           </label>
           <input
             v-model="menuName"
             type="text"
-            class="input"
+            class="input-field"
             placeholder="e.g., Main Menu, Breakfast Menu"
           />
         </div>
 
         <!-- Upload Method Tabs -->
-        <div class="card">
-          <h3 class="font-bold text-gray-900 mb-4">📋 Update Menu Items</h3>
-          <p class="text-sm text-gray-600 mb-4">Choose how you'd like to update your menu</p>
+        <div class="section-card">
+          <h3 class="section-title">📋 Update Menu Items</h3>
+          <p class="section-description">Choose how you'd like to update your menu</p>
           
-          <div class="flex gap-2 border-b border-gray-200 mb-4">
+          <div class="tabs-container">
             <button
               @click="uploadMethod = 'ocr'"
-              class="px-4 py-2 font-medium transition-colors"
-              :class="uploadMethod === 'ocr' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 hover:text-gray-900'"
+              class="tab-button"
+              :class="{ 'tab-button-active': uploadMethod === 'ocr' }"
             >
               📷 OCR Upload
             </button>
             <button
               @click="uploadMethod = 'csv'"
-              class="px-4 py-2 font-medium transition-colors"
-              :class="uploadMethod === 'csv' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 hover:text-gray-900'"
+              class="tab-button"
+              :class="{ 'tab-button-active': uploadMethod === 'csv' }"
             >
               📊 CSV Upload
             </button>
             <button
               @click="uploadMethod = 'manual'"
-              class="px-4 py-2 font-medium transition-colors"
-              :class="uploadMethod === 'manual' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-600 hover:text-gray-900'"
+              class="tab-button"
+              :class="{ 'tab-button-active': uploadMethod === 'manual' }"
             >
               ✏️ Manual Entry
             </button>
           </div>
 
           <!-- OCR Upload -->
-          <div v-if="uploadMethod === 'ocr'" class="space-y-4">
+          <div v-if="uploadMethod === 'ocr'" class="upload-section">
             <div
-              class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary-500 transition-colors cursor-pointer"
+              class="upload-area"
               @click="ocrFileInput?.click()"
             >
               <input
@@ -92,57 +92,57 @@
                 class="hidden"
                 @change="handleOCRUpload"
               />
-              <div v-if="!selectedOCRFile" class="text-4xl mb-3">📷</div>
-              <div v-else class="text-4xl mb-3">✅</div>
-              <p class="font-medium text-gray-900">
+              <div v-if="!selectedOCRFile" class="upload-icon">📷</div>
+              <div v-else class="upload-icon">✅</div>
+              <p class="upload-text">
                 {{ selectedOCRFile ? selectedOCRFile.name : 'Click to upload menu image' }}
               </p>
-              <p class="text-sm text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+              <p class="upload-hint">PNG, JPG up to 10MB</p>
             </div>
             
             <button
               v-if="selectedOCRFile && !parsedOCRText"
               @click="processOCRFile"
               :disabled="processingOCR"
-              class="w-full btn btn-primary disabled:opacity-50"
+              class="btn-primary btn-full"
             >
               <span v-if="processingOCR">Processing... {{ ocrProgress }}%</span>
               <span v-else>Parse Menu</span>
             </button>
 
             <!-- OCR Results -->
-            <div v-if="parsedOCRText" class="space-y-4">
-              <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p class="text-sm font-semibold text-blue-900 mb-2">✅ OCR Results</p>
-                <p class="text-xs text-blue-800">
+            <div v-if="parsedOCRText" class="ocr-results">
+              <div class="info-banner info-banner-success">
+                <p class="info-banner-title">✅ OCR Results</p>
+                <p class="info-banner-text">
                   Found {{ totalParsedItems }} items. Review and edit below if needed.
                 </p>
               </div>
               
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+              <div class="form-group">
+                <label class="input-label">
                   Editable OCR Text
                 </label>
                 <textarea
                   v-model="editableOCRText"
                   rows="10"
-                  class="input font-mono text-sm"
+                  class="input-field textarea-field"
                   placeholder="Edit the extracted text here..."
                 ></textarea>
                 <button
                   @click="reparseOCRText"
-                  class="mt-2 btn btn-secondary text-sm"
+                  class="btn-secondary"
                 >
                   Re-parse Text
                 </button>
               </div>
 
               <!-- Parsed Sections Preview -->
-              <div v-if="parsedOCRSections.length > 0" class="border rounded-lg p-4">
-                <h4 class="font-bold text-gray-900 mb-3">📋 Parsed Menu Structure</h4>
-                <div v-for="(section, idx) in parsedOCRSections" :key="idx" class="mb-4 last:mb-0">
-                  <p class="font-semibold text-gray-900 mb-2">{{ section.name }} ({{ section.items.length }} items)</p>
-                  <ul class="text-sm text-gray-700 space-y-1 ml-4">
+              <div v-if="parsedOCRSections.length > 0" class="parsed-preview">
+                <h4 class="parsed-preview-title">📋 Parsed Menu Structure</h4>
+                <div v-for="(section, idx) in parsedOCRSections" :key="idx" class="parsed-section">
+                  <p class="parsed-section-name">{{ section.name }} ({{ section.items.length }} items)</p>
+                  <ul class="parsed-items-list">
                     <li v-for="(item, itemIdx) in section.items" :key="itemIdx">
                       • {{ item.name }} - ${{ item.price.toFixed(2) }}
                     </li>
@@ -153,9 +153,9 @@
           </div>
 
           <!-- CSV Upload -->
-          <div v-if="uploadMethod === 'csv'" class="space-y-4">
+          <div v-if="uploadMethod === 'csv'" class="upload-section">
             <div
-              class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary-500 transition-colors cursor-pointer"
+              class="upload-area"
               @click="csvFileInput?.click()"
             >
               <input
@@ -165,74 +165,74 @@
                 class="hidden"
                 @change="handleCSVUpload"
               />
-              <div v-if="!selectedCSVFile" class="text-4xl mb-3">📊</div>
-              <div v-else class="text-4xl mb-3">✅</div>
-              <p class="font-medium text-gray-900">
+              <div v-if="!selectedCSVFile" class="upload-icon">📊</div>
+              <div v-else class="upload-icon">✅</div>
+              <p class="upload-text">
                 {{ selectedCSVFile ? selectedCSVFile.name : 'Click to upload CSV file' }}
               </p>
-              <p class="text-sm text-gray-500 mt-1">CSV file with columns: name, price, description, category</p>
+              <p class="upload-hint">CSV file with columns: name, price, description, category</p>
             </div>
-            <a href="#" @click.prevent="downloadCSVTemplate" class="text-sm text-primary-600 hover:underline block text-center">
+            <a href="#" @click.prevent="downloadCSVTemplate" class="download-link">
               📥 Download CSV Template
             </a>
           </div>
 
           <!-- Manual Entry -->
-          <div v-if="uploadMethod === 'manual'" class="space-y-4">
-            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <p class="text-sm text-gray-700 mb-4">
+          <div v-if="uploadMethod === 'manual'" class="manual-entry-section">
+            <div class="manual-entry-info">
+              <p class="manual-entry-text">
                 Add or edit menu items manually. Items are organized by sections.
               </p>
               
               <!-- Sections -->
-              <div v-for="(section, sectionIdx) in menuSections" :key="sectionIdx" class="mb-6 last:mb-0">
-                <div class="flex items-center justify-between mb-3">
+              <div v-for="(section, sectionIdx) in menuSections" :key="sectionIdx" class="section-item">
+                <div class="section-header">
                   <input
                     v-model="section.name"
                     type="text"
-                    class="input flex-1 font-semibold"
+                    class="input-field section-name-input"
                     placeholder="Section Name (e.g., Breakfast, Lunch)"
                   />
                   <button
                     @click="removeSection(sectionIdx)"
-                    class="ml-2 text-red-600 hover:text-red-800"
+                    class="btn-remove"
                   >
                     × Remove
                   </button>
                 </div>
                 
                 <!-- Items in Section -->
-                <div v-for="(item, itemIdx) in section.items" :key="itemIdx" class="mb-3 p-3 bg-white border rounded-lg">
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <div v-for="(item, itemIdx) in section.items" :key="itemIdx" class="item-row">
+                  <div class="item-inputs">
                     <input
                       v-model="item.name"
                       type="text"
                       placeholder="Item name"
-                      class="input text-sm"
+                      class="input-field item-input"
                     />
                     <input
                       v-model.number="item.price"
                       type="number"
                       step="0.01"
                       placeholder="Price"
-                      class="input text-sm"
+                      class="input-field item-input"
                     />
                     <input
                       v-model="item.category"
                       type="text"
                       placeholder="Category"
-                      class="input text-sm"
+                      class="input-field item-input"
                     />
                   </div>
                   <textarea
                     v-model="item.description"
                     rows="2"
                     placeholder="Description (optional)"
-                    class="input text-sm mb-2"
+                    class="input-field textarea-field"
                   ></textarea>
                   <button
                     @click="removeItem(sectionIdx, itemIdx)"
-                    class="text-xs text-red-600 hover:text-red-800"
+                    class="btn-remove-small"
                   >
                     Remove Item
                   </button>
@@ -240,7 +240,7 @@
                 
                 <button
                   @click="addItem(sectionIdx)"
-                  class="text-sm btn btn-secondary"
+                  class="btn-secondary"
                 >
                   + Add Item to {{ section.name || 'Section' }}
                 </button>
@@ -248,7 +248,7 @@
               
               <button
                 @click="addSection"
-                class="w-full btn btn-secondary mt-4"
+                class="btn-secondary btn-full"
               >
                 + Add New Section
               </button>
@@ -257,16 +257,16 @@
         </div>
 
         <!-- Save Button -->
-        <div class="card bg-blue-50 border border-blue-200">
+        <div class="section-card save-section">
           <button
             @click="saveMenu"
             :disabled="saving || !canSave"
-            class="w-full btn btn-primary disabled:opacity-50"
+            class="btn-primary btn-full"
           >
             <span v-if="saving">Saving menu...</span>
             <span v-else>💾 Save Menu Changes</span>
           </button>
-          <p v-if="!canSave" class="text-xs text-gray-600 mt-2 text-center">
+          <p v-if="!canSave" class="save-hint">
             Please add at least one menu item before saving
           </p>
         </div>
@@ -546,3 +546,530 @@ const saveMenu = async () => {
   }
 }
 </script>
+
+<style scoped>
+/* Light Theme - Updated Design Handoff */
+.menu-edit-page {
+  min-height: 100vh;
+  background-color: #F8F8F7;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+}
+
+/* Header */
+.header-bar {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E5E5E4;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 24px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 4px 0;
+}
+
+.menu-subtitle {
+  font-size: 14px;
+  color: #737373;
+  margin: 0;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #0b0706;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 120ms ease-out;
+}
+
+.btn-link:hover {
+  opacity: 0.7;
+}
+
+/* Content */
+.content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 15px;
+  color: #737373;
+  margin: 0;
+}
+
+/* Error Card */
+.error-card {
+  background-color: #FEFEFE;
+  border: 2px solid #DC2626;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.error-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #DC2626;
+  margin: 0 0 8px 0;
+}
+
+.error-message {
+  font-size: 15px;
+  color: #737373;
+  margin: 0 0 16px 0;
+}
+
+/* Form Container */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Section Card */
+.section-card {
+  background-color: #FEFEFE;
+  border: 2px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 8px 0;
+}
+
+.section-description {
+  font-size: 14px;
+  color: #737373;
+  margin: 0 0 16px 0;
+}
+
+/* Tabs */
+.tabs-container {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #E5E5E4;
+  margin-bottom: 16px;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #737373;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.tab-button:hover {
+  color: #0b0706;
+}
+
+.tab-button-active {
+  color: #4A1A28;
+  border-bottom-color: #4A1A28;
+}
+
+/* Input Fields */
+.input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b0706;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #DC2626;
+}
+
+.input-field {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+  min-height: 48px;
+  transition: all 120ms ease-out;
+  box-sizing: border-box;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0b0706;
+}
+
+.input-field::placeholder {
+  color: #737373;
+}
+
+.textarea-field {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #4A1A28 0%, #5D1F33 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(74, 26, 40, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5D1F33 0%, #4A1A28 100%);
+  box-shadow: 0 4px 12px rgba(74, 26, 40, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #0b0706;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  border-color: #4A1A28;
+  background-color: #FAFAF9;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* Upload Area */
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.upload-area {
+  border: 2px dashed #D4D4D3;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  background-color: #FFFFFF;
+}
+
+.upload-area:hover {
+  border-color: #4A1A28;
+  background-color: #FAFAF9;
+}
+
+.upload-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.upload-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #0b0706;
+  margin: 0 0 4px 0;
+}
+
+.upload-hint {
+  font-size: 13px;
+  color: #737373;
+  margin: 0;
+}
+
+.download-link {
+  font-size: 14px;
+  color: #4A1A28;
+  text-decoration: underline;
+  text-align: center;
+  display: block;
+  transition: all 120ms ease-out;
+}
+
+.download-link:hover {
+  opacity: 0.7;
+}
+
+/* OCR Results */
+.ocr-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-banner {
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.info-banner-success {
+  background-color: #E3F2FD;
+  border: 1px solid #90CAF9;
+}
+
+.info-banner-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1976D2;
+  margin: 0 0 4px 0;
+}
+
+.info-banner-text {
+  font-size: 13px;
+  color: #1565C0;
+  margin: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Parsed Preview */
+.parsed-preview {
+  border: 1px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #FFFFFF;
+}
+
+.parsed-preview-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 12px 0;
+}
+
+.parsed-section {
+  margin-bottom: 16px;
+}
+
+.parsed-section:last-child {
+  margin-bottom: 0;
+}
+
+.parsed-section-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 8px 0;
+}
+
+.parsed-items-list {
+  font-size: 14px;
+  color: #0b0706;
+  margin: 0 0 0 16px;
+  padding: 0;
+  list-style: disc;
+}
+
+.parsed-items-list li {
+  margin: 4px 0;
+}
+
+/* Manual Entry */
+.manual-entry-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.manual-entry-info {
+  background-color: #F5F5F4;
+  border: 1px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.manual-entry-text {
+  font-size: 14px;
+  color: #0b0706;
+  margin: 0 0 16px 0;
+}
+
+.section-item {
+  margin-bottom: 24px;
+}
+
+.section-item:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-name-input {
+  flex: 1;
+  font-weight: 600;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  color: #DC2626;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: all 120ms ease-out;
+}
+
+.btn-remove:hover {
+  opacity: 0.8;
+}
+
+.item-row {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E5E4;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.item-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.item-input {
+  min-height: 40px;
+  font-size: 14px;
+}
+
+.btn-remove-small {
+  background: none;
+  border: none;
+  color: #DC2626;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: all 120ms ease-out;
+}
+
+.btn-remove-small:hover {
+  opacity: 0.8;
+}
+
+/* Save Section */
+.save-section {
+  background-color: #E3F2FD;
+  border-color: #90CAF9;
+}
+
+.save-hint {
+  font-size: 13px;
+  color: #737373;
+  margin: 8px 0 0 0;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content {
+    padding: 16px;
+  }
+  
+  .item-inputs {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabs-container {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  
+  .tabs-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .tab-button {
+    white-space: nowrap;
+  }
+}
+</style>

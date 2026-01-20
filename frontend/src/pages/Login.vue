@@ -1,32 +1,32 @@
 <template>
-  <div class="min-h-screen bg-cream flex items-center justify-center px-4">
-    <div class="max-w-md w-full">
+  <div class="login-page">
+    <div class="login-container">
       <!-- Logo/Brand -->
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-charcoal mb-2">QR Menu</h1>
-        <p class="text-gray">Merchant Login</p>
+      <div class="login-header">
+        <h1 class="login-title">QR Menu</h1>
+        <p class="login-subtitle">Merchant Login</p>
       </div>
 
       <!-- Login Card -->
-      <div class="card">
-        <h2 class="text-2xl font-bold text-charcoal mb-6">Welcome Back</h2>
+      <div class="login-card">
+        <h2 class="card-title">Welcome Back</h2>
 
         <!-- Test Mode Banner -->
-        <div v-if="testMode" class="mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-          <p class="text-yellow-800 text-sm text-center">
-            🧪 Test Mode: Use any credentials to login
+        <div v-if="testMode" class="test-banner">
+          <p>
+            Test Mode: Use any credentials to login
           </p>
         </div>
 
         <!-- Error Message -->
-        <div v-if="errorMessage" class="mb-4 bg-red-50 border border-red-200 rounded-lg p-3">
-          <p class="text-red-700 text-sm">{{ errorMessage }}</p>
+        <div v-if="errorMessage" class="error-banner">
+          <p>{{ errorMessage }}</p>
         </div>
 
         <!-- Login Form -->
-        <form @submit.prevent="handleLogin" class="space-y-4">
+        <form @submit.prevent="handleLogin" class="login-form">
           <div>
-            <label for="email" class="block text-sm font-medium text-charcoal mb-1">
+            <label for="email" class="input-label">
               Email
             </label>
             <input
@@ -34,14 +34,14 @@
               v-model="email"
               type="email"
               required
-              class="input"
+              class="input-field"
               placeholder="your@email.com"
               :disabled="loading"
             />
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium text-charcoal mb-1">
+            <label for="password" class="input-label">
               Password
             </label>
             <input
@@ -49,24 +49,24 @@
               v-model="password"
               type="password"
               required
-              class="input"
+              class="input-field"
               placeholder="••••••••"
               :disabled="loading"
             />
           </div>
 
-          <div class="flex items-center justify-between text-sm">
-            <label class="flex items-center">
+          <div class="form-options">
+            <label class="checkbox-group">
               <input
                 v-model="rememberMe"
                 type="checkbox"
-                class="rounded border-warm-gray text-primary focus:ring-primary"
+                class="checkbox-input"
               />
-              <span class="ml-2 text-gray">Remember me</span>
+              <span class="checkbox-label">Remember me</span>
             </label>
             <button
               type="button"
-              class="text-primary hover:underline"
+              class="btn-link"
               @click="showForgotPassword"
             >
               Forgot password?
@@ -75,7 +75,7 @@
 
           <button
             type="submit"
-            class="w-full btn btn-primary"
+            class="btn-primary btn-full"
             :disabled="loading"
           >
             <span v-if="loading">Logging in...</span>
@@ -84,30 +84,28 @@
         </form>
 
         <!-- Divider -->
-        <div class="relative my-6">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-warm-gray"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray">New to QR Menu?</span>
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">
+            <span>New to QR Menu?</span>
           </div>
         </div>
 
         <!-- Sign Up Link -->
         <button
           @click="goToSignUp"
-          class="w-full btn btn-secondary"
+          class="btn-secondary btn-full"
         >
           Create an Account
         </button>
       </div>
 
       <!-- Customer Access -->
-      <div class="mt-6 text-center">
-        <p class="text-sm text-gray mb-2">Customer?</p>
+      <div class="customer-access">
+        <p class="customer-text">Customer?</p>
         <button
           @click="goToCustomerDemo"
-          class="text-primary hover:underline text-sm font-medium"
+          class="btn-link"
         >
           View Demo Menu
         </button>
@@ -197,9 +195,267 @@ const showForgotPassword = () => {
 </script>
 
 <style scoped>
-input[type="checkbox"] {
-  width: 1rem;
-  height: 1rem;
+/* Light Theme - Updated Design Handoff */
+.login-page {
+  min-height: 100vh;
+  background-color: #F8F8F7;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.login-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 8px 0;
+}
+
+.login-subtitle {
+  font-size: 15px;
+  color: #737373;
+  margin: 0;
+}
+
+.login-card {
+  background-color: #FEFEFE;
+  border: 2px solid #E5E5E4;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 24px 0;
+}
+
+.test-banner {
+  background-color: #FFF8E1;
+  border: 1px solid #FFE082;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.test-banner p {
+  font-size: 13px;
+  font-weight: 400;
+  color: #F57C00;
+  margin: 0;
+}
+
+.error-banner {
+  background-color: #FFEBEE;
+  border: 1px solid #EF9A9A;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.error-banner p {
+  font-size: 13px;
+  color: #C62828;
+  margin: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b0706;
+  margin-bottom: 8px;
+}
+
+.input-field {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #0b0706;
+  min-height: 48px;
+  transition: all 120ms ease-out;
+  box-sizing: border-box;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0b0706;
+}
+
+.input-field::placeholder {
+  color: #737373;
+}
+
+.input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkbox-input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  font-weight: 400;
+  color: #737373;
+  cursor: pointer;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #4A1A28;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 120ms ease-out;
+}
+
+.btn-link:hover {
+  opacity: 0.7;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4A1A28 0%, #5D1F33 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(74, 26, 40, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5D1F33 0%, #4A1A28 100%);
+  box-shadow: 0 4px 12px rgba(74, 26, 40, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #0b0706;
+  border: 1px solid #D4D4D3;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  border-color: #4A1A28;
+  background-color: #FAFAF9;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.divider {
+  position: relative;
+  margin: 24px 0;
+}
+
+.divider-line {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+.divider-line::before {
+  content: '';
+  width: 100%;
+  border-top: 1px solid #E5E5E4;
+}
+
+.divider-text {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.divider-text span {
+  background-color: #FEFEFE;
+  padding: 0 16px;
+  color: #737373;
+}
+
+.customer-access {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.customer-text {
+  font-size: 14px;
+  color: #737373;
+  margin: 0 0 8px 0;
 }
 </style>
 

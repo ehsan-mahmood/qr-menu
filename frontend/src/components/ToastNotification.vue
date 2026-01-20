@@ -2,18 +2,18 @@
   <Transition name="toast">
     <div
       v-if="notification"
-      class="fixed top-4 right-4 z-50 bg-white border-l-4 shadow-lg rounded-lg px-6 py-4 min-w-[300px] max-w-md animate-slide-in"
+      class="toast-notification"
       :class="getNotificationClass(notification.type)"
     >
-      <div class="flex items-start gap-3">
-        <span class="text-2xl">{{ getNotificationIcon(notification.type) }}</span>
-        <div class="flex-1">
-          <p class="font-bold text-gray-900">{{ notification.title }}</p>
-          <p class="text-sm text-gray-700 mt-1">{{ notification.message }}</p>
+      <div class="toast-content">
+        <span class="toast-icon">{{ getNotificationIcon(notification.type) }}</span>
+        <div class="toast-text">
+          <p class="toast-title">{{ notification.title }}</p>
+          <p class="toast-message">{{ notification.message }}</p>
         </div>
         <button 
           @click="$emit('close')" 
-          class="ml-2 px-2 py-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+          class="toast-close-button"
           title="Close notification"
           aria-label="Close notification"
         >
@@ -48,24 +48,115 @@ const getNotificationIcon = (type) => {
 
 const getNotificationClass = (type) => {
   const classes = {
-    new_order: 'border-green-500 bg-green-50',
-    order_update: 'border-blue-500 bg-blue-50',
-    info: 'border-blue-500 bg-blue-50',
-    success: 'border-green-500 bg-green-50',
-    warning: 'border-yellow-500 bg-yellow-50',
-    error: 'border-red-500 bg-red-50',
+    new_order: 'toast-success',
+    order_update: 'toast-info',
+    info: 'toast-info',
+    success: 'toast-success',
+    warning: 'toast-warning',
+    error: 'toast-error',
   }
-  return classes[type] || 'border-gray-500 bg-gray-50'
+  return classes[type] || 'toast-default'
 }
 </script>
 
 <style scoped>
+/* Light Theme - Updated Design Handoff */
+.toast-notification {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 50;
+  background-color: #FEFEFE;
+  border-left: 4px solid;
+  border-radius: 10px;
+  padding: 16px 20px;
+  min-width: 300px;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.toast-success {
+  border-left-color: #4A1A28;
+  background-color: #FEFEFE;
+}
+
+.toast-info {
+  border-left-color: #4A1A28;
+  background-color: #FEFEFE;
+}
+
+.toast-warning {
+  border-left-color: #4A1A28;
+  background-color: #FEFEFE;
+}
+
+.toast-error {
+  border-left-color: #DC2626;
+  background-color: #FEFEFE;
+}
+
+.toast-default {
+  border-left-color: #737373;
+  background-color: #FEFEFE;
+}
+
+.toast-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.toast-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.toast-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0b0706;
+  margin: 0 0 4px 0;
+}
+
+.toast-message {
+  font-size: 13px;
+  font-weight: 400;
+  color: #737373;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.toast-close-button {
+  margin-left: 8px;
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  color: #737373;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.toast-close-button:hover {
+  color: #0b0706;
+  background-color: #F5F5F4;
+}
+
 .toast-enter-active {
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 120ms ease-out;
 }
 
 .toast-leave-active {
-  animation: slideOut 0.3s ease-in;
+  animation: slideOut 120ms ease-in;
 }
 
 @keyframes slideIn {
@@ -88,9 +179,5 @@ const getNotificationClass = (type) => {
     transform: translateX(100%);
     opacity: 0;
   }
-}
-
-.animate-slide-in {
-  animation: slideIn 0.3s ease-out;
 }
 </style>
